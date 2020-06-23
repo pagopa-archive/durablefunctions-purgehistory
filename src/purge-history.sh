@@ -171,11 +171,11 @@ function execute_dry_run {
   top=1000
 
   output=$(func durable get-instances \
-        --connection-string-setting ${STORAGE_ACCOUNT}"_STORAGE" \
-        --task-hub-name ${TASK_HUB} \
-        --created-before ${DATE_BEFORE} \
-        --runtime-status ${LIST_STATUS} \
-        --top ${top} 2>&1)
+        --connection-string-setting "${STORAGE_ACCOUNT}_STORAGE" \
+        --task-hub-name "${TASK_HUB}" \
+        --created-before "${DATE_BEFORE}" \
+        --runtime-status "${LIST_STATUS}" \
+        --top "${top}" 2>&1)
   exit_status=$?
 
   while : ; do
@@ -202,12 +202,12 @@ function execute_dry_run {
       fi
       
       output=$(func durable get-instances \
-            --connection-string-setting ${STORAGE_ACCOUNT}"_STORAGE" \
-            --task-hub-name ${TASK_HUB} \
-            --created-before ${DATE_BEFORE} \
-            --runtime-status ${LIST_STATUS} \
-            --top ${top} \
-            --continuation-token ${continuation_token} 2>&1)
+            --connection-string-setting "${STORAGE_ACCOUNT}_STORAGE" \
+            --task-hub-name "${TASK_HUB}" \
+            --created-before "${DATE_BEFORE}" \
+            --runtime-status "${LIST_STATUS}" \
+            --top "${top}" \
+            --continuation-token "${continuation_token}" 2>&1)
       exit_status=$?
 
       [[ false ]] || break
@@ -224,10 +224,10 @@ function execute_purge {
   echo -e ${SPACES}
   echo -e "--- INFO --- executing ${GREEN}purge-history${NC}"
   output=$(func durable purge-history \
-        --connection-string-setting ${STORAGE_ACCOUNT}"_STORAGE" \
-        --task-hub-name ${TASK_HUB} \
-        --created-before ${DATE_BEFORE} \
-        --runtime-status ${LIST_STATUS} 2>&1)
+        --connection-string-setting "${STORAGE_ACCOUNT}_STORAGE" \
+        --task-hub-name "${TASK_HUB}" \
+        --created-before "${DATE_BEFORE}" \
+        --runtime-status "${LIST_STATUS}" 2>&1)
 
   exit_status=$?
   if [ "${exit_status}" -eq 0 ]; then
