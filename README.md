@@ -107,7 +107,7 @@ docker run --rm -it \
 
 ## known issues
 
-### 1. func durable purge-history outputs an incorrect instences deleted count
+### 1. func durable purge-history outputs an incorrect instances deleted count
 
 Instances and history rows are successfully deleted, but `func durable purge-history` outputs an incorrect instances deleted count.
 
