@@ -105,7 +105,15 @@ docker run --rm -it \
 
 ## known issues
 
-Running on local machine you can get in an error with az cli access token with expired UTC time.
+### 1. func durable purge-history outputs an incorrect instences deleted count
+
+Instances and history rows are successfully deleted, but `func durable purge-history` outputs an incorrect instances deleted count.
+
+It seems that purging more than 1000 instances outputs an incorrect instances deleted count.
+
+https://github.com/Azure/azure-functions-core-tools/issues/2057
+
+### 2. Running on local machine you can get in an error with az cli access token with expired UTC time.
 
 https://github.com/Azure/azure-cli/issues/4722
 
