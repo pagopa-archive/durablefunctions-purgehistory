@@ -26,6 +26,12 @@ jobs:
       - task: UseDotNet@2
         inputs:
           packageType: 'sdk'
+      # Install functions extensions
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: "publish"
+          arguments: "-o bin"
+          workingDirectory: $(System.DefaultWorkingDirectory)\dummy-project
       # 3. Purge History
       - task: AzureCLI@2
         displayName: Purge History
