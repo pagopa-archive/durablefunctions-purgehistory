@@ -15,7 +15,7 @@ pr: none
 jobs:
   - job: purge_df_history
     pool:
-      name: $(AGENT_POOL)
+      name: 'io-prod-linux' #$(AGENT_POOL)
     steps:
       # 1. Install the Azure Functions Core Tools our script will need
       - task: FuncToolsInstaller@0
