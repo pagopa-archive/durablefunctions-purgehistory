@@ -25,7 +25,7 @@ jobs:
       # 2. Install the Net Core Tools our script will need
       - task: UseDotNet@2
         inputs:
-          packageType: 'runtime'
+          packageType: 'sdk'
       # 3. Purge History
       - task: AzureCLI@2
         displayName: Purge History
