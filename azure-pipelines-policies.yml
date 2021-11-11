@@ -19,6 +19,7 @@ pool:
 
 jobs:
   - job: purge_df_history
+    timeoutInMinutes: 360 # max value
     steps:
       # 1. Install the Azure Functions Core Tools our script will need
       - task: FuncToolsInstaller@0
