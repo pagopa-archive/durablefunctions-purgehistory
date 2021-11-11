@@ -1,6 +1,6 @@
 # Azure DevOps pipeline for automating purge durable functions history.
 # All files with .env in policies folder are applied.
-# 
+#
 # The following parameter needs to be set to identify the Azure subscription :
 # - SUBSCRIPTION: PROD-IO-SERVICE-CONN | DEV-IO-SERVICE-CONN
 #
@@ -8,56 +8,33 @@
 # - SUBSCRIPTION: service connection name
 # - DRY_RUN: run pipeline without apply any changes
 
-parameters:
-  - name: 'SUBSCRIPTION'
-    displayName: 'Select the Azure subscription for which purge durable function history'
-    type: string
-    default: DEV-IO-SERVICE-CONN
-    values:
-      - PROD-IO-SERVICE-CONN
-      - DEV-IO-SERVICE-CONN
-      
-  - name: 'DRY_RUN'
-    displayName: 'Dry run (do not apply changes)'
-    type: boolean
-    default: false
-
-variables:
-  - name: 'DRY_RUN'
-    value: '${{ parameters.DRY_RUN }}'
-
-pool:
-  vmImage: 'ubuntu-latest'
-
 # The scheduled trigger will be set in the Azure DevOps portal
 trigger: none
 pr: none
 
 jobs:
   - job: purge_df_history
+    pool:
+      name: $(AGENT_POOL)
     steps:
-      # 1. Set the number of the run
-      - task: PowerShell@2
-        displayName: Update Run Number
-        inputs:
-          targetType: 'inline'
-          script: '$id = "$(Build.BuildId)"; $date = Get-Date -Format "yyyy.MMdd"; Write-Host "##vso[build.updatebuildnumber]$date.$id"'
-
-      # 2. Install the Azure Functions Core Tools our script will need
+      # 1. Install the Azure Functions Core Tools our script will need
       - task: FuncToolsInstaller@0
         displayName: Install Azure Functions Core Tools
 
-      # 3. Purge History
+      # 2. Purge History
       - task: AzureCLI@2
         displayName: Purge History
+        env:
+          STORAGE_ACCOUNT: $(STORAGE_ACCOUNT)
+          TASK_HUB: $(TASK_HUB)
+          DRY_RUN: $(DRY_RUN)
+          LIST_STATUS: $(LIST_STATUS)
+          DAYS_BEFORE: $(DAYS_BEFORE)
+          NO_CACHE: $(NO_CACHE)
         inputs:
-          azureSubscription: '${{ parameters.SUBSCRIPTION }}'
+          azureSubscription: '$(SUBSCRIPTION)'
           scriptType: 'bash'
           scriptLocation: 'inlineScript'
           failOnStandardError: true
           inlineScript: |
-            for policy in policies/*.env
-            do
-              [[ ! -e $policy ]] && continue  # continue, if file does not exist
-              bash src/purge-history.sh ${policy}
-            done
+            bash src/purge-history.sh policies/default_policy.env
