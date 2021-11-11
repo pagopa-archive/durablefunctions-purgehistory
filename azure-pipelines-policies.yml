@@ -12,27 +12,20 @@
 trigger: none
 pr: none
 
+pool:
+  vmImage: 'ubuntu-latest'
+# pool:
+#   name: 'io-prod-linux' #$(AGENT_POOL)
+
 jobs:
   - job: purge_df_history
-    pool:
-      name: 'io-prod-linux' #$(AGENT_POOL)
     steps:
       # 1. Install the Azure Functions Core Tools our script will need
       - task: FuncToolsInstaller@0
         displayName: Install Azure Functions Core Tools
         inputs:
           version: '3.0.3904'
-      # 2. Install the Net Core Tools our script will need
-      - task: UseDotNet@2
-        inputs:
-          packageType: 'sdk'
-      # Install functions extensions
-      - task: DotNetCoreCLI@2
-        inputs:
-          command: "publish"
-          arguments: "-o bin"
-          workingDirectory: $(System.DefaultWorkingDirectory)\dummy-project
-      # 3. Purge History
+      # 2. Purge History
       - task: AzureCLI@2
         displayName: Purge History
         env:
