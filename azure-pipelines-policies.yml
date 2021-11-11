@@ -21,7 +21,7 @@ jobs:
       - task: FuncToolsInstaller@0
         displayName: Install Azure Functions Core Tools
         inputs:
-          version: 3
+          version: '3.0.3904'
 
       # 2. Purge History
       - task: AzureCLI@2
